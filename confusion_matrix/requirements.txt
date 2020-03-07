@@ -1,0 +1,7 @@
+matplotlib
+scikit-learn
+numpy
+joblib
+pandas
+google-cloud-storage
+tensorflow

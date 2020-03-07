@@ -1,0 +1,9 @@
+kfp
+matplotlib
+scikit-learn
+numpy
+joblib
+pandas
+google-cloud-storage
+google-cloud-bigquery
+tensorflow
