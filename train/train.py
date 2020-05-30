@@ -16,6 +16,10 @@ if __name__ == '__main__':
                         type=str,
                         default="ai-roadmap-new-data",
                         help='GCS path to input bucket')
+    parser.add_argument('--data_path',
+                        type=str,
+                        default='natality/train',
+                        help='Path of x_train.csv and y_train.csv within the bucket')
     parser.add_argument('--output_bucket',
                         type=str,
                         default="ai-roadmap-new-experiments-output",
@@ -28,18 +32,18 @@ if __name__ == '__main__':
                         type=int,
                         default=2,
                         help='Random Forrest max_depth')
-    parser.add_argument('--n_estimator',
+    parser.add_argument('--n_estimators',
                         type=int,
-                        default=2,
-                        help='Random Forrest max_depth')
+                        default=100,
+                        help='Random Forrest number of estimators')
     parser.add_argument('--drop_features',
                         type=str,
                         default="None",
                         help='Comma separated list of features to drop')
     args = parser.parse_args()
 
-    x_train_csv_path = f'gs://{args.input_bucket}/natality/train/x_train.csv'
-    y_train_csv_path = f'gs://{args.input_bucket}/natality/train/y_train.csv'
+    x_train_csv_path = f'gs://{args.input_bucket}/{args.data_path}/x_train.csv'
+    y_train_csv_path = f'gs://{args.input_bucket}/{args.data_path}/y_train.csv'
 
     print(f"Loading train features from {x_train_csv_path}")
     with file_io.FileIO(x_train_csv_path, 'r') as x_train_file:
@@ -64,7 +68,9 @@ if __name__ == '__main__':
     imp_mean = SimpleImputer(missing_values=np.nan, strategy='mean')
     pipeline = Pipeline([
         ('impute', imp_mean),
-        ('clf', RandomForestClassifier(max_depth=args.max_depth, random_state=0))
+        ('clf', RandomForestClassifier(max_depth=args.max_depth,
+                                       n_estimators=args.n_estimators,
+                                       random_state=0))
     ])
     pipeline.fit(X_train, y)
     print("Classifier trained")

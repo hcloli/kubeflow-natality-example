@@ -3,3 +3,4 @@ venv/
 __pycache__
 ai-roadmap-new*
 *.py.yaml
+kubeconfig
