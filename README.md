@@ -3,6 +3,8 @@
 This repository contains an example of a KubeFlow pipeline that trains a model to predict babies 
 weight according to pre-birth data about the mother and the pregnancy.
 
+The aim of this repository is to show how to use KubeFlow Pipelines. 
+
 ## Build & Deploy Instructions
 ### Pre-requisites
 This code assumes GCP project. Therefore, a service account is required for the code to run. Also, it assumes
