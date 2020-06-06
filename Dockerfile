@@ -8,6 +8,10 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/tmp/ai-roadmap-new-09335e3c56d2.json
 COPY requirements.txt /tmp
 RUN pip3 install -r /tmp/requirements.txt
 
-COPY test.py /app
+COPY entrypoint.sh /app
+COPY train/train.py /app
+COPY test/test.py /app
+COPY roc_curve/roc_curve_creator.py /app
+COPY confusion_matrix/confusion_matrix.py /app
 
-ENTRYPOINT ["python3", "test.py"]
+ENTRYPOINT ["./entrypoint.sh"]

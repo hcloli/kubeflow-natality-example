@@ -1,6 +1,0 @@
-tensorflow-cpu
-matplotlib
-scikit-learn
-joblib
-pandas
-google-cloud-storage

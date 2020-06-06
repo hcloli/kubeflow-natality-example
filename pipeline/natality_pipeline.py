@@ -1,10 +1,7 @@
 import kfp
 from kfp import dsl
 
-TRAIN_IMAGE_TAG = "0.0.9"
-TEST_IMAGE_TAG = "0.0.6"
-ROC_CURVE_IMAGE_TAG = "0.0.10"
-CONF_MATRIX_IMAGE_TAG = "0.0.10"
+IMAGE_TAG = "0.0.1"
 
 
 def data_retrieve_op():
@@ -22,8 +19,9 @@ def data_retrieve_op():
 def train_op(max_depth, n_estimators, drop_features, input_bucket, output_bucket, data_path):
     return dsl.ContainerOp(
         name="train",
-        image=f'gcr.io/ai-roadmap-new/kubeflow-natality-train:{TRAIN_IMAGE_TAG}',
+        image=f'gcr.io/ai-roadmap-new/kubeflow-natality:{IMAGE_TAG}',
         arguments=[
+            'train',
             '--max_depth', max_depth,
             '--n_estimators', n_estimators,
             '--drop_features', drop_features,
@@ -40,8 +38,9 @@ def train_op(max_depth, n_estimators, drop_features, input_bucket, output_bucket
 def test_op(drop_features, train_output_path, output_bucket, input_bucket):
     return dsl.ContainerOp(
         name="test",
-        image=f'gcr.io/ai-roadmap-new/kubeflow-natality-test:{TEST_IMAGE_TAG}',
+        image=f'gcr.io/ai-roadmap-new/kubeflow-natality:{IMAGE_TAG}',
         arguments=[
+            "test",
             "--train_output_path", train_output_path,
             "--drop_features", drop_features,
             "--output_bucket", output_bucket,
@@ -56,8 +55,9 @@ def test_op(drop_features, train_output_path, output_bucket, input_bucket):
 def roc_curve_op(test_output_path, train_output_path, output_bucket, input_bucket):
     return dsl.ContainerOp(
         name="roc-curve-calc",
-        image=f'gcr.io/ai-roadmap-new/kubeflow-natality-roc-curve:{ROC_CURVE_IMAGE_TAG}',
+        image=f'gcr.io/ai-roadmap-new/kubeflow-natality:{IMAGE_TAG}',
         arguments=[
+            "roc_curve_creator",
             "--test_output_path", test_output_path,
             '--train_output_path', train_output_path,
             "--output_bucket", output_bucket,
@@ -73,8 +73,9 @@ def roc_curve_op(test_output_path, train_output_path, output_bucket, input_bucke
 def conf_matrix_op(test_output_path, input_bucket, output_bucket):
     return dsl.ContainerOp(
         name="conf-matrix-calc",
-        image=f'gcr.io/ai-roadmap-new/kubeflow-natality-conf-matrix:{CONF_MATRIX_IMAGE_TAG}',
+        image=f'gcr.io/ai-roadmap-new/kubeflow-natality:{IMAGE_TAG}',
         arguments=[
+            "confusion_matrix",
             "--test_output_path", test_output_path,
             "--output_bucket", output_bucket,
             "--input_bucket", input_bucket

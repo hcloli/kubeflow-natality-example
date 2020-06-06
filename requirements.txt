@@ -1,9 +1,9 @@
-kfp
+tensorflow-cpu
 matplotlib
 scikit-learn
-numpy
 joblib
 pandas
 google-cloud-storage
+numpy
 google-cloud-bigquery
-tensorflow
+kfp
