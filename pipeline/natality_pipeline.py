@@ -100,13 +100,14 @@ def deploy_op():
     name="Baby Weight Research Pipeline",
     description="Predict baby weight category"
 )
-def message_pipeline(
+def natality_pipeline(
         max_depth: int = 3,
         n_estimators: int = 100,
         drop_features: str = 'None',
         input_bucket: str = "ai-roadmap-new-data",
         output_bucket: str = "ai-roadmap-new-experiments-output"
 ):
+
     data_retrieve_task = data_retrieve_op()
 
     train_task = train_op(max_depth=max_depth,
@@ -143,5 +144,5 @@ def message_pipeline(
 if __name__ == '__main__':
     export_file = __file__ + ".yaml"
     print(f"Exporting pipeline to {export_file}")
-    kfp.compiler.Compiler().compile(message_pipeline, export_file)
+    kfp.compiler.Compiler().compile(natality_pipeline, export_file)
     print(f"Done")
